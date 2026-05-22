@@ -1,0 +1,272 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const templates = [
+  { slug: "sankey", name: "Sankey Diagram", subtitle: "Flows between categories", buildMin: 10 },
+  { slug: "hex-map", name: "Hex Map", subtitle: "Geographic density without overlap", buildMin: 15 },
+  { slug: "sparkline-strip", name: "Sparkline Strip", subtitle: "Compact trends across rows", buildMin: 8 },
+  { slug: "dumbbell", name: "Dumbbell Chart", subtitle: "Before / after by category", buildMin: 10 },
+  { slug: "bullet", name: "Bullet Chart", subtitle: "Actual vs target at a glance", buildMin: 12 },
+  { slug: "waterfall", name: "Waterfall", subtitle: "Cumulative breakdown", buildMin: 12 },
+];
+---
+
+<Layout>
+  <!-- Nav -->
+  <header class="border-b border-line bg-panel">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+      <a href="/" class="flex items-center gap-2 font-semibold text-ink-strong">
+        <span class="grid grid-cols-2 gap-0.5">
+          <span class="h-3 w-1.5 rounded-sm bg-brand-blue"></span>
+          <span class="h-3 w-1.5 rounded-sm bg-brand-accent"></span>
+          <span class="h-3 w-1.5 rounded-sm bg-brand-accent"></span>
+          <span class="h-3 w-1.5 rounded-sm bg-brand-blue"></span>
+        </span>
+        <span>TableauKit</span>
+      </a>
+      <ul class="flex items-center gap-7 text-sm text-ink-muted">
+        <li><a href="/templates" class="hover:text-ink-strong">Templates</a></li>
+        <li><a href="/mcp" class="hover:text-ink-strong">MCP</a></li>
+        <li><a href="/docs" class="hover:text-ink-strong">Docs</a></li>
+        <li>
+          <a
+            href="https://github.com/noamshabtai66/tableaukit"
+            class="inline-flex items-center gap-2 rounded-sm border border-line bg-app px-3 py-1.5 text-ink-strong hover:border-ink-muted"
+          >
+            GitHub
+            <span class="text-ink-muted">★ 0</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="mx-auto max-w-6xl px-6 py-20">
+    <div class="grid grid-cols-1 gap-12 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+      <div>
+        <h1 class="text-5xl font-semibold leading-[1.1] tracking-tight text-ink-strong sm:text-6xl">
+          Tableau templates<br />with the XML <em class="not-italic text-brand-blue">explained</em>
+        </h1>
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink">
+          Production-quality <code class="rounded-sm bg-app px-1.5 py-0.5 font-mono text-sm text-ink-strong">.twbx</code>
+          templates for the charts you actually want to build — sankey, hex map, sparkline strip, dumbbell — with the XML
+          annotated so you understand <em class="font-semibold not-italic text-ink-strong">how</em> they work, not just
+          that they work.
+        </p>
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <a
+            href="/templates"
+            class="rounded-sm bg-brand-blue px-5 py-3 text-sm font-medium text-white shadow-soft transition hover:bg-blue-700"
+          >
+            Browse the library →
+          </a>
+          <a
+            href="/mcp"
+            class="rounded-sm border border-line bg-panel px-5 py-3 text-sm font-medium text-ink-strong transition hover:border-ink-muted"
+          >
+            Try the MCP →
+          </a>
+        </div>
+      </div>
+
+      <!-- Preview card (flat, drop-shadowed — replace with actual Tableau-looking SVG/PNG later) -->
+      <div class="rounded-lg border border-line bg-panel p-5 shadow-hero">
+        <div class="mb-4 flex items-center gap-2 text-xs text-ink-muted">
+          <span class="h-2.5 w-2.5 rounded-full bg-[#FF5F57]"></span>
+          <span class="h-2.5 w-2.5 rounded-full bg-[#FEBC2E]"></span>
+          <span class="h-2.5 w-2.5 rounded-full bg-[#28C840]"></span>
+          <span class="ml-2 font-mono">user_flow_q3.twbx — Tableau Desktop 2024.3</span>
+        </div>
+        <div class="grid grid-cols-4 gap-3">
+          <div class="rounded-sm border border-line bg-app/40 p-3">
+            <div class="text-[10px] uppercase tracking-wide text-ink-muted">Active Users</div>
+            <div class="mt-1 font-semibold text-ink-strong">42,318</div>
+            <div class="text-[11px] text-green-600">▲ 8.4%</div>
+          </div>
+          <div class="rounded-sm border border-line bg-app/40 p-3">
+            <div class="text-[10px] uppercase tracking-wide text-ink-muted">Conversions</div>
+            <div class="mt-1 font-semibold text-ink-strong">3,142</div>
+            <div class="text-[11px] text-ink-muted">+213</div>
+          </div>
+          <div class="rounded-sm border border-line bg-app/40 p-3">
+            <div class="text-[10px] uppercase tracking-wide text-ink-muted">Avg Session</div>
+            <div class="mt-1 font-semibold text-ink-strong">4m 12s</div>
+            <div class="text-[11px] text-red-600">▼ 0.6%</div>
+          </div>
+          <div class="rounded-sm border border-line bg-app/40 p-3">
+            <div class="text-[10px] uppercase tracking-wide text-ink-muted">Churn</div>
+            <div class="mt-1 font-semibold text-ink-strong">1.84%</div>
+            <div class="text-[11px] text-ink-muted">stable</div>
+          </div>
+        </div>
+        <div class="mt-3 grid grid-cols-2 gap-3">
+          <!-- Sankey placeholder -->
+          <div class="rounded-sm border border-line bg-app/40 p-4">
+            <div class="mb-2 text-xs font-medium text-ink-strong">Monthly user flow</div>
+            <svg viewBox="0 0 200 90" class="w-full">
+              <path d="M0 20 C 60 20, 80 30, 200 30" stroke="#2563eb" stroke-width="12" fill="none" opacity="0.75" />
+              <path d="M0 45 C 60 45, 80 55, 200 60" stroke="#60a5fa" stroke-width="9" fill="none" opacity="0.7" />
+              <path d="M0 70 C 60 70, 80 70, 200 75" stroke="#a78bfa" stroke-width="5" fill="none" opacity="0.65" />
+            </svg>
+          </div>
+          <!-- Hex map placeholder -->
+          <div class="rounded-sm border border-line bg-app/40 p-4">
+            <div class="mb-2 text-xs font-medium text-ink-strong">Customer density</div>
+            <svg viewBox="0 0 200 90" class="w-full">
+              {Array.from({ length: 36 }).map((_, i) => {
+                const col = i % 9;
+                const row = Math.floor(i / 9);
+                const x = col * 22 + (row % 2 ? 11 : 0);
+                const y = row * 22;
+                const intensity = (Math.sin(col + row * 1.7) + 1) / 2;
+                const fill = intensity > 0.6 ? "#2563eb" : intensity > 0.3 ? "#60a5fa" : "#c7ddf0";
+                return <polygon points={`${x},${y + 5} ${x + 10},${y} ${x + 20},${y + 5} ${x + 20},${y + 15} ${x + 10},${y + 20} ${x},${y + 15}`} fill={fill} />;
+              })}
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Value props -->
+  <section class="mx-auto max-w-6xl px-6 pb-20">
+    <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
+      <div class="rounded-lg border border-line bg-panel p-7 shadow-soft">
+        <div class="mb-5 inline-flex h-9 w-9 items-center justify-center rounded-sm border border-line text-brand-blue">✓</div>
+        <h3 class="text-base font-semibold text-ink-strong">Templates that just work</h3>
+        <p class="mt-2 text-sm leading-relaxed text-ink">
+          Every <code class="font-mono text-xs">.twbx</code> ships with a sample CSV that opens cleanly in Tableau Desktop 2024+. No "replace data source" prompts. No broken hyper extracts.
+        </p>
+      </div>
+      <div class="relative rounded-lg border-2 border-brand-blue bg-panel p-7 shadow-card">
+        <span class="absolute -top-3 left-7 rounded-sm bg-brand-blue px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-white">Our Moat</span>
+        <div class="mb-5 inline-flex h-9 w-9 items-center justify-center rounded-sm bg-brand-blue/10 text-brand-blue">{`</>`}</div>
+        <h3 class="text-base font-semibold text-ink-strong">XML annotated, line by line</h3>
+        <p class="mt-2 text-sm leading-relaxed text-ink">
+          See exactly which <code class="font-mono text-xs">&lt;calculation&gt;</code> element creates the sankey curve and why. The part nobody else explains — not Flerlage, not Workout Wednesday, not the Tableau Exchange.
+        </p>
+      </div>
+      <div class="rounded-lg border border-line bg-panel p-7 shadow-soft">
+        <div class="mb-5 inline-flex h-9 w-9 items-center justify-center rounded-sm border border-line text-brand-blue">⚡</div>
+        <h3 class="text-base font-semibold text-ink-strong">AI-ready via MCP</h3>
+        <p class="mt-2 text-sm leading-relaxed text-ink">
+          Drop the <code class="font-mono text-xs">tableaukit-mcp</code> server into Claude Desktop or Cursor. Ask "I need a sankey for this CSV" — the server picks the right template, adapts it, returns the annotated snippet.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured templates -->
+  <section class="bg-panel border-y border-line">
+    <div class="mx-auto max-w-6xl px-6 py-20">
+      <h2 class="max-w-2xl text-4xl font-semibold tracking-tight text-ink-strong">
+        The charts analysts actually need — done right.
+      </h2>
+      <p class="mt-4 max-w-xl text-ink">
+        Six of the ten templates available in v0.1. Each one has been opened in Tableau Desktop 2024.3, validated against a sample dataset, and annotated.
+      </p>
+      <div class="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {templates.map((t) => (
+          <a
+            href={`/templates/${t.slug}`}
+            class="block rounded-lg border border-line bg-panel transition hover:border-ink-muted hover:shadow-card"
+          >
+            <div class="aspect-[16/9] rounded-t-lg bg-gradient-to-br from-app to-app/60"></div>
+            <div class="p-5">
+              <h3 class="font-semibold text-ink-strong">{t.name}</h3>
+              <p class="mt-1 text-sm text-ink-muted">{t.subtitle}</p>
+              <div class="mt-4 flex flex-wrap items-center gap-2 text-[11px]">
+                <span class="rounded-sm bg-app px-2 py-1 font-medium text-ink-muted">★ —</span>
+                <span class="rounded-sm bg-app px-2 py-1 font-medium text-ink-muted">≈{t.buildMin} min build</span>
+                <span class="rounded-sm bg-app px-2 py-1 font-medium text-ink-muted">1 sample CSV</span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- MCP callout -->
+  <section class="bg-brand-navy text-white">
+    <div class="mx-auto max-w-6xl px-6 py-20">
+      <div class="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center">
+        <div>
+          <span class="text-xs uppercase tracking-wider text-brand-accent">Model Context Protocol</span>
+          <h2 class="mt-3 text-4xl font-semibold tracking-tight">Built for the AI era.</h2>
+          <p class="mt-4 text-white/80">
+            Stop pasting screenshots into ChatGPT. The TableauKit MCP server exposes the entire library to your AI assistant — so when you ask "I need a sankey diagram for monthly user flows", you get a working
+            <code class="font-mono text-sm">.twb</code> back in seconds, not a long-winded tutorial.
+          </p>
+          <div class="mt-7 inline-flex items-center gap-3 rounded-sm bg-white/10 px-4 py-3 font-mono text-sm">
+            <span class="text-brand-accent">$</span>
+            <span>npx tableaukit-mcp install</span>
+          </div>
+          <div class="mt-6">
+            <a href="/mcp" class="text-sm font-medium text-brand-accent hover:underline">View MCP docs →</a>
+          </div>
+        </div>
+        <div class="rounded-lg border border-white/15 bg-white/5 p-5 font-mono text-xs leading-relaxed">
+          <div class="text-white/60">You</div>
+          <div class="mt-1 text-white">I need a Tableau sankey for monthly user flow transitions</div>
+          <div class="mt-5 text-white/60">tableaukit-mcp</div>
+          <div class="mt-1 text-brand-accent">→ sankey_user_flow.twb · adapted</div>
+          <pre class="mt-3 overflow-x-auto rounded-sm bg-black/30 p-3 text-[11px] text-white/85">{`<datasource name="user_flow" inline="true">
+  <column name="[Stage]" datatype="string" />
+  <column name="[Users]" datatype="integer" />
+</datasource>
+<!-- Path Bin densifies tier transitions -->
+<calculation
+  formula="IIF([Path Index]=1, [Stage], [Next Stage])" />`}</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-brand-navy text-white/70">
+    <div class="mx-auto grid max-w-6xl grid-cols-2 gap-10 px-6 py-14 md:grid-cols-4">
+      <div>
+        <div class="text-sm font-semibold text-white">TableauKit</div>
+        <ul class="mt-4 space-y-2 text-sm">
+          <li><a href="/templates" class="hover:text-white">Templates</a></li>
+          <li><a href="/mcp" class="hover:text-white">MCP</a></li>
+          <li><a href="/docs" class="hover:text-white">Docs</a></li>
+          <li><a href="/roadmap" class="hover:text-white">Roadmap</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="text-sm font-semibold text-white">Resources</div>
+        <ul class="mt-4 space-y-2 text-sm">
+          <li><a href="/docs/xml-cheatsheet" class="hover:text-white">Tableau XML cheatsheet</a></li>
+          <li><a href="/docs/calculations" class="hover:text-white">Calculation reference</a></li>
+          <li><a href="/docs/errors" class="hover:text-white">Error codes</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="text-sm font-semibold text-white">Community</div>
+        <ul class="mt-4 space-y-2 text-sm">
+          <li><a href="https://github.com/noamshabtai66/tableaukit" class="hover:text-white">GitHub</a></li>
+          <li><a href="#" class="hover:text-white">Discord</a></li>
+          <li><a href="#" class="hover:text-white">Twitter / X</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="text-sm font-semibold text-white">Legal</div>
+        <ul class="mt-4 space-y-2 text-sm">
+          <li><a href="/license" class="hover:text-white">MIT license</a></li>
+          <li><a href="/contributing" class="hover:text-white">Contributing</a></li>
+          <li><a href="/coc" class="hover:text-white">Code of conduct</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-white/10">
+      <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 text-xs text-white/50">
+        <span>© 2026 TableauKit · MIT licensed</span>
+        <span>Made with Tableau Desktop + Claude</span>
+      </div>
+    </div>
+  </footer>
+</Layout>
