@@ -1,0 +1,48 @@
+---
+import type { User } from "@supabase/supabase-js";
+
+interface Props {
+  user: User | null;
+}
+
+const { user } = Astro.props;
+---
+
+<header class="border-b border-line bg-panel">
+  <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+    <a href="/" class="flex items-center gap-2 font-semibold text-ink-strong">
+      <span class="grid grid-cols-2 gap-0.5">
+        <span class="h-3 w-1.5 rounded-sm bg-brand-blue"></span>
+        <span class="h-3 w-1.5 rounded-sm bg-brand-accent"></span>
+        <span class="h-3 w-1.5 rounded-sm bg-brand-accent"></span>
+        <span class="h-3 w-1.5 rounded-sm bg-brand-blue"></span>
+      </span>
+      <span>TableauKit</span>
+    </a>
+    <ul class="flex items-center gap-7 text-sm text-ink-muted">
+      <li><a href="/templates" class="hover:text-ink-strong">Templates</a></li>
+      <li><a href="/mcp" class="hover:text-ink-strong">MCP</a></li>
+      <li><a href="/docs" class="hover:text-ink-strong">Docs</a></li>
+      <li>
+        <a
+          href="https://github.com/noamshabtai66/tableaukit"
+          class="inline-flex items-center gap-2 rounded-sm border border-line bg-app px-3 py-1.5 text-ink-strong hover:border-ink-muted"
+        >
+          GitHub <span class="text-ink-muted">★ 0</span>
+        </a>
+      </li>
+      {user ? (
+        <li class="flex items-center gap-3">
+          <a href="/account" class="text-ink-strong hover:underline">{user.email}</a>
+          <form method="POST" action="/signout" class="inline">
+            <button type="submit" class="text-ink-muted hover:text-ink-strong">Sign out</button>
+          </form>
+        </li>
+      ) : (
+        <li>
+          <a href="/signin" class="font-medium text-brand-blue hover:underline">Sign in</a>
+        </li>
+      )}
+    </ul>
+  </nav>
+</header>

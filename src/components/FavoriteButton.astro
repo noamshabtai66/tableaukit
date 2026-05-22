@@ -1,0 +1,38 @@
+---
+import type { User } from "@supabase/supabase-js";
+
+interface Props {
+  user: User | null;
+  templateSlug: string;
+  isFavorited: boolean;
+}
+
+const { user, templateSlug, isFavorited } = Astro.props;
+---
+
+{user ? (
+  <form method="POST" action="/api/favorites" class="inline">
+    <input type="hidden" name="template_slug" value={templateSlug} />
+    <input type="hidden" name="action" value={isFavorited ? "remove" : "add"} />
+    <button
+      type="submit"
+      class={`inline-flex items-center gap-2 rounded-sm border px-4 py-2.5 text-sm font-medium transition ${
+        isFavorited
+          ? "border-brand-blue bg-brand-blue/5 text-brand-blue"
+          : "border-line bg-panel text-ink-strong hover:border-ink-muted"
+      }`}
+      aria-pressed={isFavorited ? "true" : "false"}
+    >
+      <span aria-hidden="true">{isFavorited ? "♥" : "♡"}</span>
+      {isFavorited ? "Favorited" : "Favorite"}
+    </button>
+  </form>
+) : (
+  <a
+    href={`/signup?next=${encodeURIComponent(`/templates/${templateSlug}`)}`}
+    class="inline-flex items-center gap-2 rounded-sm border border-line bg-panel px-4 py-2.5 text-sm font-medium text-ink-strong hover:border-ink-muted"
+  >
+    <span aria-hidden="true">♡</span>
+    Sign up to favorite
+  </a>
+)}

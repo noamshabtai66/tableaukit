@@ -1,0 +1,88 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+export const prerender = false;
+
+let error: string | null = null;
+
+if (Astro.request.method === "POST") {
+  const formData = await Astro.request.formData();
+  const email = (formData.get("email") ?? "").toString().trim();
+  const password = (formData.get("password") ?? "").toString();
+
+  if (!email || !password) {
+    error = "Email and password are required.";
+  } else {
+    const { error: signInError } = await Astro.locals.supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (signInError) {
+      error = signInError.message;
+    } else {
+      const next = new URL(Astro.request.url).searchParams.get("next") ?? "/account";
+      return Astro.redirect(next);
+    }
+  }
+}
+
+if (Astro.locals.user && Astro.request.method === "GET") {
+  return Astro.redirect("/account");
+}
+---
+
+<Layout title="Sign in · TableauKit">
+  <header class="border-b border-line bg-panel">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+      <a href="/" class="font-semibold text-ink-strong">TableauKit</a>
+      <a href="/signup" class="text-sm text-ink-muted hover:text-ink-strong">Create account</a>
+    </nav>
+  </header>
+
+  <main class="mx-auto max-w-md px-6 py-16">
+    <h1 class="text-3xl font-semibold text-ink-strong">Sign in</h1>
+
+    {error && (
+      <div class="mt-6 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+        {error}
+      </div>
+    )}
+
+    <form method="POST" class="mt-6 space-y-4">
+      <div>
+        <label for="email" class="block text-sm font-medium text-ink-strong">Email</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          autocomplete="email"
+          required
+          class="mt-1 w-full rounded-sm border border-line bg-panel px-3 py-2 text-ink-strong focus:border-brand-blue focus:outline-none"
+        />
+      </div>
+      <div>
+        <label for="password" class="block text-sm font-medium text-ink-strong">Password</label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          autocomplete="current-password"
+          required
+          class="mt-1 w-full rounded-sm border border-line bg-panel px-3 py-2 text-ink-strong focus:border-brand-blue focus:outline-none"
+        />
+      </div>
+      <button
+        type="submit"
+        class="w-full rounded-sm bg-brand-blue px-4 py-2.5 text-sm font-medium text-white transition hover:bg-blue-700"
+      >
+        Sign in
+      </button>
+    </form>
+
+    <p class="mt-6 text-center text-sm text-ink-muted">
+      No account yet?{" "}
+      <a href="/signup" class="font-medium text-brand-blue hover:underline">Create one</a>
+    </p>
+  </main>
+</Layout>

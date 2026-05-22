@@ -1,0 +1,57 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+export const prerender = false;
+
+if (!Astro.locals.user) {
+  return Astro.redirect("/signin?next=/account");
+}
+
+const user = Astro.locals.user;
+
+// Favorites: empty in Phase C (gallery wiring comes in Phase D).
+// Once Phase D ships, this will join tk_favorites → tk_templates.
+const { data: favorites } = await Astro.locals.supabase
+  .from("tk_favorites")
+  .select("template_slug, created_at")
+  .order("created_at", { ascending: false });
+---
+
+<Layout title="Your account · TableauKit">
+  <header class="border-b border-line bg-panel">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+      <a href="/" class="font-semibold text-ink-strong">TableauKit</a>
+      <div class="flex items-center gap-4 text-sm">
+        <span class="text-ink-muted">{user.email}</span>
+        <form method="POST" action="/signout">
+          <button type="submit" class="text-ink-muted hover:text-ink-strong">Sign out</button>
+        </form>
+      </div>
+    </nav>
+  </header>
+
+  <main class="mx-auto max-w-3xl px-6 py-16">
+    <h1 class="text-3xl font-semibold text-ink-strong">Your account</h1>
+    <p class="mt-2 text-ink-muted">Signed in as <span class="text-ink-strong">{user.email}</span>.</p>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-semibold text-ink-strong">Favorites</h2>
+      {favorites && favorites.length > 0 ? (
+        <ul class="mt-4 space-y-2">
+          {favorites.map((fav) => (
+            <li class="rounded-sm border border-line bg-panel px-4 py-3">
+              <a href={`/templates/${fav.template_slug}`} class="text-brand-blue hover:underline">
+                {fav.template_slug}
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="mt-4 text-ink-muted">
+          No favorites yet.{" "}
+          <a href="/templates" class="text-brand-blue hover:underline">Browse templates →</a>
+        </p>
+      )}
+    </section>
+  </main>
+</Layout>

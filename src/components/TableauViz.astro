@@ -1,0 +1,35 @@
+---
+// TableauViz wraps the Tableau Public Embedding API v3 web component.
+// Requires the Embedding API script to be loaded by the page (see [slug].astro).
+// The <tableau-viz> custom element is provided by Tableau and reads its `src`
+// attribute as the public viz URL (e.g. https://public.tableau.com/views/...).
+
+interface Props {
+  src: string;
+  title?: string;
+  height?: string;
+  hideTabs?: boolean;
+  toolbar?: "top" | "bottom" | "hidden";
+}
+
+const {
+  src,
+  title = "Tableau visualization",
+  height = "640px",
+  hideTabs = false,
+  toolbar = "bottom",
+} = Astro.props;
+---
+
+<div class="overflow-hidden rounded-lg border border-line bg-panel shadow-card" style={`min-height:${height}`}>
+  <tableau-viz
+    id="tableauViz"
+    src={src}
+    width="100%"
+    height={height}
+    toolbar={toolbar}
+    hide-tabs={hideTabs ? "" : undefined}
+    title={title}
+  >
+  </tableau-viz>
+</div>
