@@ -7,8 +7,8 @@ import { readFileSync, writeFileSync } from "node:fs";
 const IN = "tmp/template-candidates.json";
 const OUT = "tmp/template-curated.json";
 
-const TARGET_COUNT = 100;
-const MIN_VIEWS = 500;
+const TARGET_COUNT = 120;
+const MIN_VIEWS = 200;
 const EXISTING_SLUGS_DEDUPE = ["sankey-multi-level", "dumbbell", "bullet", "hex-tile-map"];
 
 // chart_type → matched by keywords in title (case-insensitive, first match wins)
@@ -154,8 +154,8 @@ function main() {
     t.difficulty = DIFFICULTY_BY_TYPE[t.chart_type] ?? "intermediate";
   });
 
-  // 3. Drop "other" overflow — keep only top 20 by views since they're uncategorized
-  const other = filtered.filter((t) => t.chart_type === "other").sort((a, b) => b.view_count - a.view_count).slice(0, 20);
+  // 3. Drop "other" overflow — keep only top 30 by views since they're uncategorized
+  const other = filtered.filter((t) => t.chart_type === "other").sort((a, b) => b.view_count - a.view_count).slice(0, 30);
   const categorized = filtered.filter((t) => t.chart_type !== "other");
   filtered = [...categorized, ...other];
   console.log(`  ${categorized.length} categorized + ${other.length} other = ${filtered.length}`);
