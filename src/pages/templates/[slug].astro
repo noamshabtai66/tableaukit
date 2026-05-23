@@ -1,4 +1,5 @@
 ---
+import { marked } from "marked";
 import Layout from "../../layouts/Layout.astro";
 import Nav from "../../components/Nav.astro";
 import TableauViz from "../../components/TableauViz.astro";
@@ -24,13 +25,18 @@ if (error || !template) {
   return Astro.redirect("/templates");
 }
 
-// Storage public URL for the .twbx
-const { data: twbxUrlData } = Astro.locals.supabase
-  .storage
-  .from("templates")
-  .getPublicUrl(template.twbx_storage_path);
-
-const twbxUrl = twbxUrlData.publicUrl;
+// twbx_storage_path is null for embedded-from-Tableau-Public templates —
+// the Download button links to the original workbook on Tableau Public instead.
+let twbxUrl: string;
+if (template.twbx_storage_path) {
+  const { data } = Astro.locals.supabase
+    .storage
+    .from("templates")
+    .getPublicUrl(template.twbx_storage_path);
+  twbxUrl = data.publicUrl;
+} else {
+  twbxUrl = template.tableau_public_url;
+}
 
 let isFavorited = false;
 if (Astro.locals.user) {
@@ -42,10 +48,18 @@ if (Astro.locals.user) {
     .maybeSingle();
   isFavorited = !!fav;
 }
+
+const md = (text: string | null | undefined) =>
+  text ? marked.parse(text, { async: false }) as string : "";
+
+const seniorTakeHtml = md(template.senior_take_md);
+const useCasesHtml = md(template.use_cases_md);
+const antiPatternsHtml = md(template.anti_patterns_md);
+const pitfallsHtml = md(template.pitfalls_md);
+const annotationHtml = md(template.annotation_md);
 ---
 
 <Layout title={`${template.name} · TableauKit`} description={template.subtitle}>
-  <!-- Tableau Embedding API v3 (only loaded on detail pages) -->
   <script
     is:inline
     type="module"
@@ -80,40 +94,113 @@ if (Astro.locals.user) {
       </div>
     </header>
 
+    <!-- Interactive Tableau Public viz -->
     <section class="mt-10">
       <TableauViz src={template.tableau_public_url} title={template.name} />
     </section>
 
+    <!-- Senior analyst's take: prominent full-width card. This is the moat. -->
+    {seniorTakeHtml && (
+      <section class="mt-12 rounded-xl border-2 border-brand-blue bg-gradient-to-br from-brand-blue/[0.03] to-brand-blue/[0.08] p-8 shadow-card">
+        <div class="flex items-center gap-3">
+          <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-brand-blue text-white text-lg" aria-hidden="true">★</span>
+          <h2 class="text-xl font-semibold text-ink-strong">A senior analyst's take</h2>
+        </div>
+        <div class="prose prose-base mt-5 max-w-3xl text-ink prose-strong:text-ink-strong prose-strong:font-semibold prose-p:leading-relaxed" set:html={seniorTakeHtml} />
+      </section>
+    )}
+
+    <!-- Two-column: practical guidance + sidebar -->
     <section class="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-[1.4fr_1fr]">
-      <article class="prose prose-sm max-w-none">
-        <h2 class="text-2xl font-semibold text-ink-strong">How the XML works</h2>
-        <div class="mt-4 whitespace-pre-wrap text-ink leading-relaxed">{template.annotation_md}</div>
+      <article class="space-y-10">
+        {useCasesHtml && (
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-green-600" aria-hidden="true">✓</span>
+              <h2 class="text-2xl font-semibold text-ink-strong">When to use this chart</h2>
+            </div>
+            <div class="prose prose-sm mt-3 max-w-none text-ink marker:text-brand-blue prose-strong:text-ink-strong prose-li:my-1.5" set:html={useCasesHtml} />
+          </div>
+        )}
+
+        {antiPatternsHtml && (
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-red-500" aria-hidden="true">✗</span>
+              <h2 class="text-2xl font-semibold text-ink-strong">When <em class="not-italic underline decoration-red-300 decoration-2 underline-offset-4">not</em> to use it</h2>
+            </div>
+            <p class="mt-1 text-sm text-ink-muted">…and what to reach for instead.</p>
+            <div class="prose prose-sm mt-3 max-w-none text-ink marker:text-red-400 prose-strong:text-ink-strong prose-li:my-1.5" set:html={antiPatternsHtml} />
+          </div>
+        )}
+
+        {pitfallsHtml && (
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-amber-500" aria-hidden="true">⚠</span>
+              <h2 class="text-2xl font-semibold text-ink-strong">Common pitfalls</h2>
+            </div>
+            <p class="mt-1 text-sm text-ink-muted">Tactical gotchas when building.</p>
+            <div class="prose prose-sm mt-3 max-w-none text-ink marker:text-amber-500 prose-strong:text-ink-strong prose-li:my-1.5" set:html={pitfallsHtml} />
+          </div>
+        )}
+
+        {annotationHtml && (
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-ink-muted font-mono text-sm" aria-hidden="true">{`</>`}</span>
+              <h2 class="text-2xl font-semibold text-ink-strong">How the XML works</h2>
+            </div>
+            <p class="mt-1 text-sm text-ink-muted">Line-by-line walkthrough of the key calculations.</p>
+            <div class="prose prose-sm mt-3 max-w-none text-ink prose-h3:text-ink-strong prose-h3:font-semibold prose-h3:mt-6 prose-pre:bg-ink-strong prose-pre:text-white prose-code:text-brand-blue prose-code:before:content-none prose-code:after:content-none prose-strong:text-ink-strong" set:html={annotationHtml} />
+          </div>
+        )}
       </article>
 
-      <aside class="rounded-lg border border-line bg-panel p-6">
-        <h3 class="text-sm font-semibold uppercase tracking-wider text-ink-muted">At a glance</h3>
-        <dl class="mt-4 space-y-3 text-sm">
-          <div class="flex justify-between">
-            <dt class="text-ink-muted">Chart type</dt>
-            <dd class="font-medium text-ink-strong">{template.chart_type}</dd>
+      <aside class="space-y-6">
+        <div class="rounded-lg border border-line bg-panel p-6">
+          <h3 class="text-sm font-semibold uppercase tracking-wider text-ink-muted">At a glance</h3>
+          <dl class="mt-4 space-y-3 text-sm">
+            <div class="flex justify-between">
+              <dt class="text-ink-muted">Chart type</dt>
+              <dd class="font-medium text-ink-strong">{template.chart_type}</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt class="text-ink-muted">Difficulty</dt>
+              <dd class="font-medium text-ink-strong">{template.difficulty}</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt class="text-ink-muted">Build time</dt>
+              <dd class="font-medium text-ink-strong">≈{template.build_time_min} min</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt class="text-ink-muted">Tableau Public</dt>
+              <dd>
+                <a href={template.tableau_public_url} class="font-medium text-brand-blue hover:underline" target="_blank" rel="noopener">
+                  View source →
+                </a>
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+        {template.author_name && (
+          <div class="rounded-lg border border-line bg-panel p-6">
+            <h3 class="text-sm font-semibold uppercase tracking-wider text-ink-muted">Original by</h3>
+            <div class="mt-3">
+              {template.author_profile_url ? (
+                <a href={template.author_profile_url} class="text-base font-medium text-brand-blue hover:underline" target="_blank" rel="noopener">
+                  {template.author_name} →
+                </a>
+              ) : (
+                <span class="text-base font-medium text-ink-strong">{template.author_name}</span>
+              )}
+            </div>
+            {template.license_note && (
+              <p class="mt-3 text-xs leading-relaxed text-ink-muted">{template.license_note}</p>
+            )}
           </div>
-          <div class="flex justify-between">
-            <dt class="text-ink-muted">Difficulty</dt>
-            <dd class="font-medium text-ink-strong">{template.difficulty}</dd>
-          </div>
-          <div class="flex justify-between">
-            <dt class="text-ink-muted">Build time</dt>
-            <dd class="font-medium text-ink-strong">≈{template.build_time_min} min</dd>
-          </div>
-          <div class="flex justify-between">
-            <dt class="text-ink-muted">Tableau Public</dt>
-            <dd>
-              <a href={template.tableau_public_url} class="font-medium text-brand-blue hover:underline" target="_blank" rel="noopener">
-                View source →
-              </a>
-            </dd>
-          </div>
-        </dl>
+        )}
       </aside>
     </section>
   </main>
