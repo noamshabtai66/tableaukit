@@ -158,6 +158,25 @@ const annotationHtml = md(template.annotation_md);
       </article>
 
       <aside class="space-y-6">
+        {template.content_tier === 1 && (
+          <div class="rounded-lg border-2 border-brand-blue bg-brand-blue/5 p-4">
+            <div class="flex items-center gap-2 text-sm font-semibold text-brand-blue">
+              <span aria-hidden="true">★</span>
+              <span>Flagship template</span>
+            </div>
+            <p class="mt-1 text-xs text-ink-muted">Full annotation + senior take, use cases, anti-patterns, and pitfalls.</p>
+          </div>
+        )}
+        {template.content_tier === 2 && (
+          <div class="rounded-lg border border-purple-300 bg-purple-50 p-4">
+            <div class="flex items-center gap-2 text-sm font-semibold text-purple-800">
+              <span aria-hidden="true">◆</span>
+              <span>Deep dive</span>
+            </div>
+            <p class="mt-1 text-xs text-ink-muted">Senior take + use cases + anti-patterns. (No XML annotation.)</p>
+          </div>
+        )}
+
         <div class="rounded-lg border border-line bg-panel p-6">
           <h3 class="text-sm font-semibold uppercase tracking-wider text-ink-muted">At a glance</h3>
           <dl class="mt-4 space-y-3 text-sm">

@@ -8,3 +8,5 @@ dist/
 *.log
 .vercel/
 .netlify/
+tmp/
+.playwright-mcp/
