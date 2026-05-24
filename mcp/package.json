@@ -1,0 +1,23 @@
+{
+  "name": "tableaukit-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "MCP server exposing the TableauKit template gallery to Claude / Cursor / VS Code",
+  "main": "server.mjs",
+  "bin": {
+    "tableaukit-mcp": "./server.mjs"
+  },
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "@supabase/supabase-js": "^2.104.1",
+    "dotenv": "^16.4.5",
+    "zod": "^3.23.8"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
