@@ -90,6 +90,27 @@ const AUTHORS = [
   "kalyan.guggilam",
   "ivan.b1",
   "shanker.singh",
+  // Round 3 expansion — Zen Masters, prolific community authors
+  "jonathan.drummey",
+  "joe.mako",
+  "andy.cotgreave",
+  "robert.mundigl",
+  "chimdi.nwosu",
+  "mike.cisneros",
+  "sandy.sherwood",
+  "pooja.gandhi",
+  "tim.ngwena",
+  "tom.brown",
+  "craig.bloodworth",
+  "liz.hardman",
+  "mattia.fantoni",
+  "thibault.deschamps",
+  "deepak.ramani",
+  "corey.jones",
+  "pablo.gomez",
+  "hossam.abdelaty",
+  "devesh.dongre",
+  "ben.sullins",
 ];
 
 async function fetchAuthor(profileName) {

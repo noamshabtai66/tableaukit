@@ -7,7 +7,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 const IN = "tmp/template-candidates.json";
 const OUT = "tmp/template-curated.json";
 
-const TARGET_COUNT = 120;
+const TARGET_COUNT = 140;
 const MIN_VIEWS = 200;
 const EXISTING_SLUGS_DEDUPE = ["sankey-multi-level", "dumbbell", "bullet", "hex-tile-map"];
 
@@ -24,6 +24,7 @@ const CHART_TYPE_RULES = [
   [/\bviolin\b/i, "violin"],
   [/\bbox\s*plot|boxplot\b/i, "box-plot"],
   [/\bbeeswarm\b/i, "beeswarm"],
+  [/\bhorizon\s*chart\b/i, "area"],
   [/\bwaffle\b/i, "waffle"],
   [/\bhex(\s*tile)?(\s*map)?\b/i, "hex-map"],
   [/\bchoropleth\b/i, "choropleth"],
